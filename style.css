@@ -1,0 +1,954 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+    background: #fafafa;
+    min-height: 100vh;
+    padding: 0;
+    color: #1a1a1a;
+}
+
+.container {
+    max-width: 1600px;
+    margin: 0 auto;
+}
+
+header {
+    text-align: center;
+    padding: 60px 20px 40px;
+    background: white;
+    border-bottom: 1px solid #e5e5e5;
+}
+
+header h1 {
+    font-size: 2.5em;
+    margin-bottom: 12px;
+    font-weight: 600;
+    color: #000;
+    letter-spacing: -0.02em;
+}
+
+header p {
+    font-size: 1em;
+    color: #666;
+    font-weight: 400;
+}
+
+.main-content {
+    display: grid;
+    grid-template-columns: 420px 1fr;
+    gap: 0;
+    min-height: calc(100vh - 180px);
+}
+
+.input-section {
+    background: white;
+    padding: 40px;
+    border-right: 1px solid #e5e5e5;
+    overflow-y: auto;
+    max-height: calc(100vh - 180px);
+}
+
+.preview-section {
+    background: #fafafa;
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.preview-header {
+    width: 100%;
+    max-width: 1000px;
+    display: flex;
+    gap: 12px;
+    margin-bottom: 20px;
+    justify-content: flex-end;
+}
+
+.btn-edit {
+    padding: 10px 20px;
+    border: 1px solid #e0e0e0;
+    border-radius: 6px;
+    background: white;
+    color: #333;
+    font-size: 0.9em;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.btn-edit:hover {
+    background: #fafafa;
+    border-color: #000;
+}
+
+.btn-edit.active {
+    background: #000;
+    color: white;
+    border-color: #000;
+}
+
+.edit-icon {
+    font-size: 1em;
+}
+
+h2 {
+    font-size: 1.1em;
+    margin-bottom: 30px;
+    color: #000;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+}
+
+.form-group {
+    margin-bottom: 24px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+    color: #333;
+    font-size: 0.9em;
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1px solid #e0e0e0;
+    border-radius: 6px;
+    font-size: 0.95em;
+    transition: all 0.2s;
+    font-family: inherit;
+    background: white;
+    color: #1a1a1a;
+}
+
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+    outline: none;
+    border-color: #000;
+    background: #fafafa;
+}
+
+.form-group textarea {
+    resize: vertical;
+    min-height: 100px;
+}
+
+.form-group small {
+    display: block;
+    margin-top: 6px;
+    color: #999;
+    font-size: 0.85em;
+}
+
+.btn-primary, .btn-secondary {
+    width: 100%;
+    padding: 14px;
+    border: none;
+    border-radius: 6px;
+    font-size: 1em;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: inherit;
+}
+
+.btn-primary {
+    background: #000;
+    color: white;
+}
+
+.btn-primary:hover {
+    background: #333;
+}
+
+.btn-primary:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+}
+
+.btn-secondary {
+    background: white;
+    color: #000;
+    border: 1px solid #e0e0e0;
+    margin-top: 20px;
+}
+
+.btn-secondary:hover {
+    background: #fafafa;
+    border-color: #000;
+}
+
+.download-buttons {
+    display: flex;
+    gap: 12px;
+    width: 100%;
+    max-width: 1000px;
+    margin-top: 20px;
+}
+
+.download-buttons .btn-secondary {
+    flex: 1;
+    margin-top: 0;
+}
+
+.slide-container {
+    width: 100%;
+    max-width: 1000px;
+    aspect-ratio: 16/9;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 20px rgba(0,0,0,0.08);
+    background: white;
+    position: relative;
+}
+
+.slide-container.edit-mode .slide-title,
+.slide-container.edit-mode .slide-subtitle,
+.slide-container.edit-mode .slide-content {
+    outline: 2px dashed transparent;
+    transition: outline 0.2s;
+    cursor: text;
+}
+
+.slide-container.edit-mode .slide-title:hover,
+.slide-container.edit-mode .slide-subtitle:hover,
+.slide-container.edit-mode .slide-content:hover {
+    outline-color: rgba(255,255,255,0.4);
+}
+
+.slide-container.edit-mode .slide-title:focus,
+.slide-container.edit-mode .slide-subtitle:focus,
+.slide-container.edit-mode .slide-content:focus {
+    outline-color: rgba(255,255,255,0.8);
+    outline-style: solid;
+}
+
+.edit-hint {
+    position: absolute;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0,0,0,0.75);
+    color: white;
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-size: 0.85em;
+    z-index: 100;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.edit-hint.show {
+    opacity: 1;
+}
+
+.placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: white;
+    color: #999;
+}
+
+.placeholder-icon {
+    font-size: 3em;
+    margin-bottom: 16px;
+    opacity: 0.5;
+}
+
+.placeholder p {
+    font-size: 0.95em;
+    color: #999;
+}
+
+/* PPT 模板样式 - 专业级排版设计 */
+.slide {
+    width: 100%;
+    height: 100%;
+    padding: 80px 100px;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    overflow: hidden;
+    font-family: 'Helvetica Neue', 'Arial', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+}
+
+/* 1. Bold & Vibrant - 左对齐，强烈对比 */
+.gradient-modern {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+.gradient-modern .slide-title {
+    font-size: 6.5em;
+    font-weight: 900;
+    margin-bottom: 20px;
+    line-height: 0.95;
+    letter-spacing: -0.05em;
+    text-transform: uppercase;
+    max-width: 90%;
+}
+
+.gradient-modern .slide-subtitle {
+    font-size: 1.3em;
+    font-weight: 300;
+    opacity: 0.75;
+    margin-bottom: 80px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+}
+
+.gradient-modern .slide-content {
+    font-size: 1.4em;
+    line-height: 1.9;
+    font-weight: 400;
+    max-width: 750px;
+    opacity: 0.95;
+}
+
+/* 2. Swiss Minimalism - 居中对齐，极致留白 */
+.minimal-elegant {
+    background: #ffffff;
+    color: #000;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.minimal-elegant::before {
+    content: '';
+    position: absolute;
+    top: 60px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80px;
+    height: 3px;
+    background: #000;
+}
+
+.minimal-elegant .slide-title {
+    font-size: 5.5em;
+    font-weight: 300;
+    margin-bottom: 30px;
+    margin-top: 40px;
+    color: #000;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    max-width: 900px;
+}
+
+.minimal-elegant .slide-subtitle {
+    font-size: 1.8em;
+    color: #999;
+    font-weight: 700;
+    margin-bottom: 60px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.minimal-elegant .slide-content {
+    font-size: 1.15em;
+    line-height: 2.3;
+    color: #444;
+    font-weight: 400;
+    max-width: 650px;
+    margin: 0 auto;
+}
+
+/* 3. Tech Brutalism - 右对齐，等宽字体 */
+.tech-future {
+    background: #000;
+    color: #00ff88;
+    justify-content: center;
+    align-items: flex-end;
+    text-align: right;
+}
+
+.tech-future::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: 
+        linear-gradient(90deg, transparent 0%, transparent calc(100% - 2px), #00ff88 calc(100% - 2px), #00ff88 100%),
+        linear-gradient(0deg, transparent 0%, transparent calc(100% - 2px), #00ff88 calc(100% - 2px), #00ff88 100%);
+    opacity: 0.3;
+}
+
+.tech-future .slide-title {
+    font-size: 7em;
+    font-weight: 900;
+    margin-bottom: 25px;
+    line-height: 0.9;
+    letter-spacing: -0.06em;
+    text-shadow: 0 0 40px rgba(0,255,136,0.4);
+    position: relative;
+    z-index: 1;
+    font-family: 'Courier New', 'Consolas', monospace;
+    text-transform: uppercase;
+}
+
+.tech-future .slide-subtitle {
+    font-size: 1.1em;
+    color: #00ff88;
+    opacity: 0.6;
+    margin-bottom: 70px;
+    position: relative;
+    z-index: 1;
+    font-weight: 400;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+}
+
+.tech-future .slide-content {
+    font-size: 1.25em;
+    line-height: 2;
+    color: #00ff88;
+    opacity: 0.85;
+    position: relative;
+    z-index: 1;
+    max-width: 700px;
+    font-weight: 300;
+}
+
+/* 4. Playful Modern - 左对齐，色彩层次 */
+.warm-creative {
+    background: linear-gradient(135deg, #ff6b6b 0%, #feca57 100%);
+    color: white;
+    justify-content: flex-start;
+    align-items: flex-start;
+    padding-top: 120px;
+}
+
+.warm-creative::before {
+    content: '';
+    position: absolute;
+    width: 500px;
+    height: 500px;
+    background: rgba(255,255,255,0.15);
+    border-radius: 50%;
+    top: -250px;
+    right: -100px;
+}
+
+.warm-creative::after {
+    content: '';
+    position: absolute;
+    width: 350px;
+    height: 350px;
+    background: rgba(0,0,0,0.08);
+    border-radius: 50%;
+    bottom: -150px;
+    left: -100px;
+}
+
+.warm-creative .slide-title {
+    font-size: 6em;
+    font-weight: 800;
+    margin-bottom: 25px;
+    line-height: 1;
+    position: relative;
+    z-index: 1;
+    letter-spacing: -0.04em;
+    max-width: 85%;
+}
+
+.warm-creative .slide-subtitle {
+    font-size: 2.2em;
+    font-weight: 300;
+    opacity: 0.85;
+    margin-bottom: 70px;
+    position: relative;
+    z-index: 1;
+    letter-spacing: 0.02em;
+}
+
+.warm-creative .slide-content {
+    font-size: 1.35em;
+    line-height: 2;
+    font-weight: 400;
+    max-width: 750px;
+    position: relative;
+    z-index: 1;
+    opacity: 0.95;
+}
+
+/* 5. Corporate Clean - 左对齐，几何装饰 */
+.business-pro {
+    background: #0f172a;
+    color: white;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+.business-pro::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 45%;
+    height: 100%;
+    background: linear-gradient(135deg, rgba(99,102,241,0.12) 0%, rgba(168,85,247,0.12) 100%);
+    clip-path: polygon(25% 0, 100% 0, 100% 100%, 0% 100%);
+}
+
+.business-pro::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 6px;
+    height: 200px;
+    background: linear-gradient(180deg, #6366f1 0%, #a855f7 100%);
+}
+
+.business-pro .slide-title {
+    font-size: 5.2em;
+    font-weight: 700;
+    margin-bottom: 30px;
+    position: relative;
+    z-index: 1;
+    line-height: 1.1;
+    letter-spacing: -0.04em;
+    max-width: 80%;
+}
+
+.business-pro .slide-subtitle {
+    font-size: 1.4em;
+    font-weight: 600;
+    margin-bottom: 60px;
+    position: relative;
+    z-index: 1;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #a78bfa;
+    opacity: 0.9;
+}
+
+.business-pro .slide-content {
+    font-size: 1.3em;
+    line-height: 2.1;
+    font-weight: 300;
+    max-width: 700px;
+    position: relative;
+    z-index: 1;
+    opacity: 0.9;
+}
+
+/* 6. Image Overlay - 底部左对齐，强对比 */
+.unsplash-bg {
+    background-size: cover;
+    background-position: center;
+    color: white;
+    justify-content: flex-end;
+    align-items: flex-start;
+    padding-bottom: 100px;
+}
+
+.unsplash-bg::before {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 60%;
+    background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, transparent 100%);
+}
+
+.unsplash-bg .slide-title {
+    font-size: 6.5em;
+    font-weight: 900;
+    margin-bottom: 25px;
+    line-height: 0.95;
+    text-shadow: 0 4px 30px rgba(0,0,0,0.7);
+    letter-spacing: -0.05em;
+    position: relative;
+    z-index: 1;
+    max-width: 90%;
+}
+
+.unsplash-bg .slide-subtitle {
+    font-size: 1.6em;
+    font-weight: 300;
+    margin-bottom: 50px;
+    text-shadow: 0 2px 15px rgba(0,0,0,0.6);
+    letter-spacing: 0.05em;
+    opacity: 0.95;
+    position: relative;
+    z-index: 1;
+}
+
+.unsplash-bg .slide-content {
+    font-size: 1.3em;
+    line-height: 2;
+    font-weight: 400;
+    max-width: 800px;
+    text-shadow: 0 2px 15px rgba(0,0,0,0.6);
+    background: rgba(0,0,0,0.5);
+    padding: 40px 50px;
+    border-radius: 0;
+    backdrop-filter: blur(15px);
+    border-left: 5px solid white;
+    position: relative;
+    z-index: 1;
+}
+
+/* 响应式设计 */
+@media (max-width: 1200px) {
+    .main-content {
+        grid-template-columns: 380px 1fr;
+    }
+}
+
+@media (max-width: 1024px) {
+    .main-content {
+        grid-template-columns: 1fr;
+    }
+    
+    .input-section {
+        border-right: none;
+        border-bottom: 1px solid #e5e5e5;
+        max-height: none;
+    }
+    
+    .preview-section {
+        min-height: 600px;
+    }
+}
+
+@media (max-width: 768px) {
+    header h1 {
+        font-size: 2em;
+    }
+    
+    .input-section,
+    .preview-section {
+        padding: 24px;
+    }
+    
+    .slide {
+        padding: 40px 50px;
+    }
+    
+    .slide-title {
+        font-size: 3em !important;
+    }
+}
+
+/* 更换底图模态框 */
+.background-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    backdrop-filter: blur(4px);
+}
+
+.modal-content {
+    background: white;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 500px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+}
+
+.modal-header {
+    padding: 24px 24px 16px;
+    border-bottom: 1px solid #e5e5e5;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.modal-header h3 {
+    font-size: 1.2em;
+    font-weight: 600;
+    color: #000;
+}
+
+.modal-close {
+    background: none;
+    border: none;
+    font-size: 1.8em;
+    color: #999;
+    cursor: pointer;
+    padding: 0;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px;
+    transition: all 0.2s;
+}
+
+.modal-close:hover {
+    background: #f5f5f5;
+    color: #000;
+}
+
+.modal-body {
+    padding: 24px;
+}
+
+.bg-option-group label {
+    display: block;
+    margin-bottom: 12px;
+    font-weight: 500;
+    color: #333;
+    font-size: 0.9em;
+}
+
+.bg-options {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.bg-option-btn {
+    padding: 12px;
+    border: 1px solid #e0e0e0;
+    border-radius: 6px;
+    background: white;
+    color: #333;
+    font-size: 0.9em;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.bg-option-btn:hover {
+    border-color: #000;
+    background: #fafafa;
+}
+
+.bg-option-btn.active {
+    background: #000;
+    color: white;
+    border-color: #000;
+}
+
+.bg-settings {
+    margin-top: 16px;
+}
+
+.bg-settings label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+    color: #333;
+    font-size: 0.9em;
+}
+
+.bg-settings input,
+.bg-settings select {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #e0e0e0;
+    border-radius: 6px;
+    font-size: 0.9em;
+    font-family: inherit;
+}
+
+.bg-settings small {
+    display: block;
+    margin-top: 6px;
+    color: #999;
+    font-size: 0.85em;
+}
+
+.modal-footer {
+    padding: 16px 24px;
+    border-top: 1px solid #e5e5e5;
+    display: flex;
+    gap: 12px;
+    justify-content: flex-end;
+}
+
+.btn-cancel,
+.btn-confirm {
+    padding: 10px 24px;
+    border-radius: 6px;
+    font-size: 0.9em;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    border: none;
+}
+
+.btn-cancel {
+    background: white;
+    color: #666;
+    border: 1px solid #e0e0e0;
+}
+
+.btn-cancel:hover {
+    background: #fafafa;
+    border-color: #000;
+    color: #000;
+}
+
+.btn-confirm {
+    background: #000;
+    color: white;
+}
+
+.btn-confirm:hover {
+    background: #333;
+}
+
+.btn-confirm:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+}
+
+/* 文字样式工具栏 */
+.text-style-toolbar {
+    background: white;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 16px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+    display: flex;
+    gap: 20px;
+    align-items: flex-end;
+    flex-wrap: wrap;
+    max-width: 1000px;
+    width: 100%;
+}
+
+.toolbar-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.toolbar-group label {
+    font-size: 0.85em;
+    color: #666;
+    font-weight: 500;
+}
+
+.toolbar-group input[type="color"] {
+    width: 60px;
+    height: 36px;
+    border: 1px solid #e0e0e0;
+    border-radius: 6px;
+    cursor: pointer;
+    padding: 2px;
+}
+
+.toolbar-group input[type="number"] {
+    width: 80px;
+    padding: 8px 10px;
+    border: 1px solid #e0e0e0;
+    border-radius: 6px;
+    font-size: 0.9em;
+}
+
+.toolbar-group select {
+    padding: 8px 10px;
+    border: 1px solid #e0e0e0;
+    border-radius: 6px;
+    font-size: 0.9em;
+    background: white;
+    cursor: pointer;
+    min-width: 120px;
+}
+
+.toolbar-group input:focus,
+.toolbar-group select:focus {
+    outline: none;
+    border-color: #000;
+}
+
+.align-buttons {
+    display: flex;
+    gap: 4px;
+}
+
+.align-btn {
+    width: 36px;
+    height: 36px;
+    border: 1px solid #e0e0e0;
+    border-radius: 6px;
+    background: white;
+    cursor: pointer;
+    font-size: 1em;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.align-btn:hover {
+    background: #fafafa;
+    border-color: #000;
+}
+
+.align-btn.active {
+    background: #000;
+    color: white;
+    border-color: #000;
+}
+
+/* 选中文字时的提示 */
+.text-selected-hint {
+    position: absolute;
+    top: -40px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0,0,0,0.85);
+    color: white;
+    padding: 6px 12px;
+    border-radius: 4px;
+    font-size: 0.8em;
+    white-space: nowrap;
+    pointer-events: none;
+    z-index: 10;
+}
+
+.text-selected-hint::after {
+    content: '';
+    position: absolute;
+    bottom: -4px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 0;
+    border-left: 4px solid transparent;
+    border-right: 4px solid transparent;
+    border-top: 4px solid rgba(0,0,0,0.85);
+}
