@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PPT 生成器</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>PPT 生成器</h1>
+            <p>输入文案，生成精美演示图片</p>
+        </header>
+
+        <div class="main-content">
+            <div class="input-section">
+                <h2>内容设置</h2>
+                <div class="form-group">
+                    <label>标题</label>
+                    <input type="text" id="titleInput" placeholder="输入标题">
+                </div>
+                <div class="form-group">
+                    <label>副标题（可选）</label>
+                    <input type="text" id="subtitleInput" placeholder="输入副标题">
+                </div>
+                <div class="form-group">
+                    <label>正文内容</label>
+                    <textarea id="contentInput" rows="4" placeholder="输入正文内容，支持多行"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>模板风格</label>
+                    <select id="templateSelect">
+                        <option value="gradient-modern">Bold & Vibrant</option>
+                        <option value="minimal-elegant">Swiss Minimalism</option>
+                        <option value="tech-future">Tech Brutalism</option>
+                        <option value="warm-creative">Playful Modern</option>
+                        <option value="business-pro">Corporate Clean</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>背景图片</label>
+                    <select id="imageSource">
+                        <option value="none">无背景图</option>
+                        <option value="unsplash">自然风景</option>
+                        <option value="ai">AI 生成</option>
+                    </select>
+                </div>
+                <div class="form-group" id="unsplashThemeGroup" style="display: none;">
+                    <label>图片主题</label>
+                    <select id="imageTheme">
+                        <option value="nature">自然风光</option>
+                        <option value="mountain">山脉</option>
+                        <option value="ocean">海洋</option>
+                        <option value="forest">森林</option>
+                        <option value="sunset">日落</option>
+                        <option value="sky">天空</option>
+                        <option value="landscape">风景</option>
+                        <option value="beach">海滩</option>
+                    </select>
+                </div>
+                <div class="form-group" id="aiPromptGroup" style="display: none;">
+                    <label>AI 图片描述</label>
+                    <input type="text" id="aiPrompt" placeholder="描述你想要的背景图片">
+                    <small>用中文或英文描述场景、颜色、氛围等</small>
+                </div>
+                <button id="generateBtn" class="btn-primary">生成图片</button>
+            </div>
+
+            <div class="preview-section">
+                <div class="preview-header">
+                    <button id="editModeBtn" class="btn-edit" style="display: none;">
+                        <span class="edit-icon">✏️</span> 编辑模式
+                    </button>
+                    <button id="changeBackgroundBtn" class="btn-edit" style="display: none;">
+                        <span class="edit-icon">🖼️</span> 更换底图
+                    </button>
+                </div>
+                
+                <!-- 文字样式工具栏 -->
+                <div id="textStyleToolbar" class="text-style-toolbar" style="display: none;">
+                    <div class="toolbar-group">
+                        <label>颜色</label>
+                        <input type="color" id="textColorPicker" value="#ffffff">
+                    </div>
+                    <div class="toolbar-group">
+                        <label>字体</label>
+                        <select id="fontFamilySelect">
+                            <option value="'Helvetica Neue', Arial, sans-serif">Helvetica</option>
+                            <option value="'Arial', sans-serif">Arial</option>
+                            <option value="'Times New Roman', serif">Times New Roman</option>
+                            <option value="'Georgia', serif">Georgia</option>
+                            <option value="'Courier New', monospace">Courier New</option>
+                            <option value="'PingFang SC', 'Microsoft YaHei', sans-serif">苹方/微软雅黑</option>
+                            <option value="'STSong', 'SimSun', serif">宋体</option>
+                            <option value="'STKaiti', 'KaiTi', serif">楷体</option>
+                        </select>
+                    </div>
+                    <div class="toolbar-group">
+                        <label>字号</label>
+                        <input type="number" id="fontSizeInput" min="12" max="200" step="2" value="48">
+                    </div>
+                    <div class="toolbar-group">
+                        <label>粗细</label>
+                        <select id="fontWeightSelect">
+                            <option value="300">细体</option>
+                            <option value="400">常规</option>
+                            <option value="500">中等</option>
+                            <option value="600">半粗</option>
+                            <option value="700">粗体</option>
+                            <option value="900">特粗</option>
+                        </select>
+                    </div>
+                    <div class="toolbar-group">
+                        <label>对齐</label>
+                        <div class="align-buttons">
+                            <button class="align-btn" data-align="left" title="左对齐">⬅</button>
+                            <button class="align-btn" data-align="center" title="居中">↔</button>
+                            <button class="align-btn" data-align="right" title="右对齐">➡</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="slidePreview" class="slide-container">
+                    <div class="placeholder">
+                        <div class="placeholder-icon">○</div>
+                        <p>在左侧输入内容并点击生成</p>
+                    </div>
+                </div>
+                <div class="download-buttons" style="display: none;">
+                    <button id="downloadBtn" class="btn-secondary">下载图片 (PNG)</button>
+                    <button id="downloadSvgBtn" class="btn-secondary">下载矢量图 (SVG)</button>
+                    <button id="downloadHtmlBtn" class="btn-secondary">下载可编辑版 (HTML)</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="script.js"></script>
+    <script src="text-style-editor.js"></script>
+    <script src="edit-mode.js"></script>
+    <script src="download-handlers.js"></script>
+</body>
+</html>
